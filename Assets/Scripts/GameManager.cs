@@ -61,6 +61,9 @@ public class GameManager : MonoBehaviour
     public void DecreaseTimer()
     {
         _gameTimer -= Time.deltaTime;
+        if (_gameTimer <= 0)
+            GameOver();
+
         _gameTimerText.text = "Time " + _gameTimer.ToString();
     }
 

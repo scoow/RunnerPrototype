@@ -29,6 +29,10 @@ public class Player : MonoBehaviour
         onGround = false;
     }
 
+    private bool IsFalling()
+    {
+        return (transform.position.y < -3);
+    }
 
 
     void PlayerControl()
@@ -44,10 +48,14 @@ public class Player : MonoBehaviour
         {
             transform.Translate(speedmove * Time.deltaTime * Vector3.right);
         }
+
         if (Input.GetKey(KeyCode.A))
         {
             transform.Translate(speedmove * Time.deltaTime * Vector3.left);
         }
+
+        if (IsFalling())
+            GameManager.instance.GameOver();
     }
 
     public void Jump()
