@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speedmove = 8f;
-    [SerializeField] float forceJamp = 8f;
-    [SerializeField] bool onGround = false;
-    Rigidbody rb;
+    public static Player currentPlayer;
 
-    public static Player instance;
-
+    [SerializeField] private float _speedmove = 8f;
+    [SerializeField] private float _forceJamp = 8f;
+    private bool onGround = false;
+    private Rigidbody rb;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -18,7 +15,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        currentPlayer = this;
     }
 
     void Update()
@@ -44,7 +41,7 @@ public class Player : MonoBehaviour
 
     void PlayerControl()
     {
-        transform.Translate(speedmove * Time.deltaTime * Vector3.forward);
+        transform.Translate(_speedmove * Time.deltaTime * Vector3.forward);
 
         if (Input.GetKeyDown(KeyCode.Space) && onGround)
         {
@@ -53,12 +50,12 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(speedmove * Time.deltaTime * Vector3.right);
+            transform.Translate(_speedmove * Time.deltaTime * Vector3.right);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(speedmove * Time.deltaTime * Vector3.left);
+            transform.Translate(_speedmove * Time.deltaTime * Vector3.left);
         }
 
         if (IsFalling())
@@ -70,8 +67,22 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(-7f, transform.position.y, transform.position.z);
     }
 
-    public void Jump()
+    private void Jump()
     {
-        rb.AddForce(Vector3.up * forceJamp, ForceMode.VelocityChange);
+        rb.AddForce(Vector3.up * _forceJamp, ForceMode.VelocityChange);
+    }
+
+    public void ThrowUp(float force)
+    {
+        rb.AddForce(Vector3.up * force, ForceMode.VelocityChange);
+    }
+
+    public void ThrowBack(float force)
+    {
+        rb.AddForce(Vector3.back * force, ForceMode.VelocityChange);
+    }
+    public void IncreasePlayerSpeed(float seconds)
+    {
+        _speedmove += seconds;
     }
 }

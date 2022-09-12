@@ -1,49 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ Проверка вида триггера при столкновении с игроком, выбор действия
+*/
 public class TriggerComponent : MonoBehaviour
 {   
     [SerializeField] private TypeOfTrigger _typeOfTrigger;
-
-    private Player player;
+    [SerializeField, Range(0, 24)] private float _throwUpForce = 12;
+    [SerializeField, Range(0, 24)] private float _throwBackForce = 9;
 
     private void OnTriggerEnter(Collider other)
     {
-        player = other.GetComponent<Player>();
-
-        if (player = null)
+        if (other.GetComponent<Player>() is null)
             return;
 
         switch (_typeOfTrigger)
         {
             case TypeOfTrigger.DamageTrigger:
                 GameManager.instance.DecreaseHP();
-                other.attachedRigidbody.AddForce(Vector3.back * 5, ForceMode.VelocityChange);
+                Player.currentPlayer.ThrowBack(_throwBackForce);
                 break;
             case TypeOfTrigger.MovingObstacleTrigger:
+                Player.currentPlayer.ThrowBack(_throwBackForce);
                 break;
             case TypeOfTrigger.SpringboardTrigger:
-                //player.Jump();
-                other.attachedRigidbody.AddForce(Vector3.up * 12, ForceMode.VelocityChange);
+                Player.currentPlayer.ThrowUp(_throwUpForce);
                 break;
-            /*case TypeOfTrigger.FallingTrigger:
-                GameManager.instance.GameOver();
-                break;*/
             case TypeOfTrigger.EndOfTileTrigger:
                 GameManager.instance.IncreaseScore();
+                Debug.Log("Score");
                 break;
             default:
                 break;
         }
     }
-
     private enum TypeOfTrigger
     {
         DamageTrigger,
         MovingObstacleTrigger,
         SpringboardTrigger,
-        FallingTrigger,
         EndOfTileTrigger
     }
 }

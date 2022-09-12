@@ -1,33 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
+Управление таймером, счётчиком очков и hp
+Вывод этих значений на UI
+Условие завершения игры
+*/
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public Text _scoreText;
-    public Text _hpText;
-    public Text _gameTimerText;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private Text _hpText;
+    [SerializeField] private Text _gameTimerText;
+    [SerializeField] private float _gameSpeedIncreasePerTile = 0.5f;
 
+    [SerializeField, Range(1,100)] private float _gameTimer = 100;
     private int _score;
-    public int _hp;
-    private float _gameTimer;
-
+    private int _hp;
     private void Awake()
     {
         instance = this;
     }
-     
-    void Start()
+    private void Start()
     {
         ResetScore();
         ResetHP();
         ResetGameTimer();
     }
-
+    private void Update()
+    {
+        DecreaseTimer();
+    }
     private void ResetScore()
     {
         _score = 0;
@@ -38,44 +42,45 @@ public class GameManager : MonoBehaviour
         _hp = 3;
         _hpText.text = "HP " + _hp.ToString();
     }
-
+    private void ResetGameTimer()
+    {
+        _gameTimerText.text = "Time " + _gameTimer.ToString();
+    }
     public void IncreaseScore()
     {
         _score++;
         _scoreText.text = "Score " + _score.ToString();
-        Player.instance.speedmove++;//
-    }
-    private void ResetGameTimer()
-    {
-        _gameTimer = 100;
-        _gameTimerText.text = "Time " + _gameTimer.ToString();
-    }
 
+        IncreaseGameSpeed();
+    }
+    private void IncreaseGameSpeed()
+    {
+        Player.currentPlayer.IncreasePlayerSpeed(_gameSpeedIncreasePerTile);
+    }
     public void DecreaseHP()
     {
         _hp--;
         _hpText.text = "HP " + _hp.ToString();
-        if (_hp <= 0)
-            GameOver();
+        if (PlayerDied())
+             GameOver();
     }
-
+    private bool PlayerDied()
+    {
+        return (_hp <= 0);
+    }
     public void DecreaseTimer()
     {
         _gameTimer -= Time.deltaTime;
-        if (_gameTimer <= 0)
+        _gameTimerText.text = "Time " + Convert.ToInt32(_gameTimer).ToString();
+        if (OutOfTime())
             GameOver();
-
-        _gameTimerText.text = "Time " + _gameTimer.ToString();
     }
-
-    private void Update()
+    private bool OutOfTime()
     {
-        DecreaseTimer();
+        return _gameTimer < 0; 
     }
-
     public void GameOver()
     {
-        //Destroy(gameObject);
         UnityEditor.EditorApplication.isPaused = true;
     }
 }
