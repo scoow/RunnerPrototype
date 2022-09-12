@@ -6,7 +6,7 @@ public class TriggerComponent : MonoBehaviour
 {   
     [SerializeField] private TypeOfTrigger _typeOfTrigger;
 
-    [SerializeField] private Player player;
+    private Player player;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -26,9 +26,9 @@ public class TriggerComponent : MonoBehaviour
                 //player.Jump();
                 other.attachedRigidbody.AddForce(Vector3.up * 12, ForceMode.VelocityChange);
                 break;
-            case TypeOfTrigger.FallingTrigger:
+            /*case TypeOfTrigger.FallingTrigger:
                 GameManager.instance.GameOver();
-                break;
+                break;*/
             case TypeOfTrigger.EndOfTileTrigger:
                 GameManager.instance.IncreaseScore();
                 break;
