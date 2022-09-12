@@ -18,7 +18,8 @@ public class LevelGenerator : MonoBehaviour
 
     private void LevelInitialization()
     {
-        for (int i = 0; i < startTilesCount; i++)
+        SpawnTile(0);
+        for (int i = 1; i < startTilesCount; i++)
         {
             SpawnTile(Random.Range(0, tilePrefabs.Length));
         }

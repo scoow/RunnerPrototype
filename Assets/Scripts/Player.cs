@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float speedmove = 8f;
+    public float speedmove = 8f;
     [SerializeField] float forceJamp = 8f;
     [SerializeField] bool onGround = false;
     Rigidbody rb;
 
+    public static Player instance;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void Awake()
+    {
+        instance = this;
     }
 
     void Update()
@@ -56,6 +63,11 @@ public class Player : MonoBehaviour
 
         if (IsFalling())
             GameManager.instance.GameOver();
+
+        if (transform.position.x > 7f)
+            transform.position = new Vector3(7f, transform.position.y, transform.position.z);
+        if (transform.position.x < -7f)
+            transform.position = new Vector3(-7f, transform.position.y, transform.position.z);
     }
 
     public void Jump()

@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     {
         _score++;
         _scoreText.text = "Score " + _score.ToString();
+        Player.instance.speedmove++;//
     }
     private void ResetGameTimer()
     {

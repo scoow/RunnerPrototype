@@ -19,6 +19,7 @@ public class TriggerComponent : MonoBehaviour
         {
             case TypeOfTrigger.DamageTrigger:
                 GameManager.instance.DecreaseHP();
+                other.attachedRigidbody.AddForce(Vector3.back * 5, ForceMode.VelocityChange);
                 break;
             case TypeOfTrigger.MovingObstacleTrigger:
                 break;
