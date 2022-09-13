@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text _scoreText;
     [SerializeField] private Text _hpText;
     [SerializeField] private Text _gameTimerText;
-    [SerializeField] private float _gameSpeedIncreasePerTile = 0.5f;
+    [SerializeField] private float _gameSpeedIncreasedPerTile = 0.5f;
 
     [SerializeField, Range(1,100)] private float _gameTimer = 100;
     private int _score;
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     }
     private void IncreaseGameSpeed()
     {
-        Player.currentPlayer.IncreasePlayerSpeed(_gameSpeedIncreasePerTile);
+        Player.currentPlayer.IncreasePlayerSpeed(_gameSpeedIncreasedPerTile);
     }
     public void DecreaseHP()
     {

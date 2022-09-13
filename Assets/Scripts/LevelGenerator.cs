@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/*
+Генерация начального уровня из startTilesCount тайлов
+Добавление новых тайлов в случайном порядке по мере движения игрока и удаление старых
+*/
+
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject[] tilePrefabs;
     private readonly List<GameObject> activeTiles = new();
     private float spawnPos = 0;
 
-    [SerializeField] private float tileLength = 45;
+    private readonly float tileLength = 45;
     [SerializeField] private Transform player;
     [SerializeField] private int startTilesCount = 6;
 
@@ -16,6 +21,11 @@ public class LevelGenerator : MonoBehaviour
         LevelInitialization();
     }
     void Update()
+    {
+        SpawnNextTileAndDeleteFirst();
+    }
+
+    private void SpawnNextTileAndDeleteFirst()
     {
         if (player.position.z - 45 > spawnPos - (startTilesCount * tileLength))
         {

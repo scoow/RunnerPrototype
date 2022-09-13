@@ -1,51 +1,43 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+/*
+Цикличное движение препятствия с помощью корутин
+*/
 public class MovingObstacle : MonoBehaviour
 {
-    [SerializeField] float _time = 3;
-    [SerializeField] float _speed = 3;
+    [SerializeField] float _timeToMove = 3;
+    [SerializeField] float _speedOfPlatform = 3;
+    [SerializeField] float _amplitude = 5;
     void Start()
     {
-        StartCoroutine(CyclePlatformMove(_time));
+        StartCoroutine(CyclePlatformMoving());
     }
-
-    private IEnumerator CyclePlatformMove(float time)
+    private IEnumerator CyclePlatformMoving()
     {
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition = transform.position + new Vector3(0, _amplitude, 0);
         while (true)
         {
-            var currentTime = 0f;
-            Vector3 startPosition = transform.position;
-            Vector3 endPosition = transform.position + new Vector3(0, 5f, 0);
-            while (currentTime < time)//асинхронный цикл, выполняется time секунд
-            {
-                //Lerp - в зависимости от времени (в относительных единицах, то есть от 0 до 1
-                //смещает объект от startPosition к endPosition
-
-                transform.position = Vector3.Lerp(startPosition, endPosition, _speed * currentTime / time);//в формулу добавлено влияние скорости персонажа
-                currentTime += Time.deltaTime;//обновление времени, для смещения
-                yield return null;//ожидание следующего кадра
-            }
-            //Из-за неточности времени между кадрами, без этой строчки вы не получите точное значение endPosition
-            transform.position = endPosition;
-
-
-            currentTime = 0f;
-            while (currentTime < time)//асинхронный цикл, выполняется time секунд
-            {
-                //Lerp - в зависимости от времени (в относительных единицах, то есть от 0 до 1
-                //смещает объект от startPosition к endPosition
-
-                transform.position = Vector3.Lerp(endPosition, startPosition, _speed * currentTime / time);//в формулу добавлено влияние скорости персонажа
-                currentTime += Time.deltaTime;//обновление времени, для смещения
-                yield return null;//ожидание следующего кадра
-            }
-            //Из-за неточности времени между кадрами, без этой строчки вы не получите точное значение endPosition
-            transform.position = startPosition;
+            StartCoroutine(MoveFromStartToEnd(startPosition, endPosition, _speedOfPlatform, _timeToMove));
+            yield return new WaitForSeconds(_timeToMove);
+            StartCoroutine(MoveFromStartToEnd(endPosition, startPosition, _speedOfPlatform, _timeToMove));
+            yield return new WaitForSeconds(_timeToMove);
         }
-
 
     }
 
+    private IEnumerator MoveFromStartToEnd(Vector3 startPosition, Vector3 endPosition, float speed, float time)
+    {
+
+        float currentTime = 0f;
+
+        while (currentTime < _timeToMove)
+        {
+            transform.position = Vector3.Lerp(startPosition, endPosition, speed * currentTime / time);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = endPosition;
+
+    }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657683, g: 0.49641192, b: 0.5748182, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -503,14 +503,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.422216, y: 0.018434355, z: -0.039532606, w: 0.9054452}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: 0, z: -5}
 --- !u!1 &886802033 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3321774348827508146, guid: 20f31fa92021fe6469680a5f2fa417f2, type: 3}
@@ -752,6 +752,8 @@ MonoBehaviour:
   _scoreText: {fileID: 1296874581}
   _hpText: {fileID: 1479471701}
   _gameTimerText: {fileID: 965227305}
+  _gameSpeedIncreasedPerTile: 0.5
+  _gameTimer: 100
 --- !u!1 &1133131590 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1620212751081439133, guid: 346fa1b4d1c560d469417fb9b957a561, type: 3}
@@ -829,7 +831,6 @@ MonoBehaviour:
   - {fileID: 297098674}
   - {fileID: 1133131590}
   - {fileID: 1684551726}
-  tileLength: 45
   player: {fileID: 1718768524}
   startTilesCount: 6
 --- !u!1001 &1183866155
@@ -1537,9 +1538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5213c243339767240b5bf369179b27be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedmove: 8
-  forceJamp: 8
-  onGround: 0
+  _speedmove: 8
+  _forceJamp: 8
 --- !u!54 &1718768526
 Rigidbody:
   m_ObjectHideFlags: 0
