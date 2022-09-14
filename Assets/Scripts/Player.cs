@@ -1,87 +1,85 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+namespace TopEngineTeam
 {
-    public static Player currentPlayer;
+    /*
+    Движение игрока
+    */
+    public class Player : MonoBehaviour
+    {
+        public static Player currentPlayer;
 
-    [SerializeField] private float _speedmove = 8f;
-    [SerializeField] private float _forceJamp = 8f;
-    private bool _onGround = false;
-    private Rigidbody _rb;
-    void Start()
-    {
-        _rb = GetComponent<Rigidbody>();
-    }
+        public float _speedmove = 8f;
+        [SerializeField] private float _forceJump = 8f;
+        public bool _onGround = false;
+        private Rigidbody _rb;
 
-    private void Awake()
-    {
-        currentPlayer = this;
-    }
-
-    void Update()
-    {
-        PlayerControl();
-        if (IsFalling())
-            GameManager.instance.GameOver();
-        FixIfOutOfBounds();
-    }
-    private bool IsFalling()
-    {
-        return (transform.position.y < -3);
-    }
-    protected virtual void PlayerControl()
-    {
-        transform.Translate(_speedmove * Time.deltaTime * Vector3.forward);
-
-        if (Input.GetKeyDown(KeyCode.Space) && _onGround)
+        void Start()
         {
-            Jump();
+            _rb = GetComponent<Rigidbody>();
         }
 
-        if (Input.GetKey(KeyCode.D))
+        private void Awake()
         {
-            transform.Translate(_speedmove * Time.deltaTime * Vector3.right);
+            currentPlayer = this;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        void Update()
         {
-            transform.Translate(_speedmove * Time.deltaTime * Vector3.left);
+            AlwaysMoveForward();
+            if (IsFalling())
+                GameManager.instance.GameOver();
+            FixIfOutOfBounds();
         }
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        _onGround = true;
-    }
+        private bool IsFalling()
+        {
+            return (transform.position.y < -3);
+        }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        _onGround = false;
-    }
+        public void MoveLeftOrRight(float direction)
+        {
+            transform.Translate(_speedmove * Time.deltaTime * direction * Vector3.right);
+        }
 
-    private void FixIfOutOfBounds()
-    {
-        if (transform.position.x > 7f)
-            transform.position = new Vector3(7f, transform.position.y, transform.position.z);
-        if (transform.position.x < -7f)
-            transform.position = new Vector3(-7f, transform.position.y, transform.position.z);
-    }
+        public void AlwaysMoveForward()
+        {
+            transform.Translate(_speedmove * Time.deltaTime * Vector3.forward);
+        }
 
-    private void Jump()
-    {
-        _rb.AddForce(Vector3.up * _forceJamp, ForceMode.VelocityChange);
-    }
+        private void OnCollisionStay(Collision collision)
+        {
+            _onGround = true;
+        }
 
-    public void ThrowUp(float force)
-    {
-        _rb.AddForce(Vector3.up * force, ForceMode.VelocityChange);
-    }
+        private void OnCollisionExit(Collision collision)
+        {
+            _onGround = false;
+        }
+        private void FixIfOutOfBounds()
+        {
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -7, 7), transform.position.y, transform.position.z);
+        }
 
-    public void ThrowBack(float force)
-    {
-        _rb.AddForce(Vector3.back * force, ForceMode.VelocityChange);
-    }
-    public void IncreasePlayerSpeed(float seconds)
-    {
-        _speedmove += seconds;
+        public void Jump()
+        {
+            if (_onGround)
+                _rb.AddForce(Vector3.up * _forceJump, ForceMode.VelocityChange);
+        }
+
+        public void ThrowUp(float force)
+        {
+            _rb.AddForce(Vector3.up * force, ForceMode.VelocityChange);
+        }
+
+        public void ThrowBack(float force)
+        {
+            _rb.AddForce(Vector3.back * force, ForceMode.VelocityChange);
+        }
+        public void IncreasePlayerSpeed(float seconds)
+        {
+            _speedmove += seconds;
+        }
+
+        public void MoveForward() => transform.Translate(_speedmove * Time.deltaTime * Vector3.forward);
     }
 }
